@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.views import View
-from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
 import openai
 
 openai.api_key = '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'
@@ -12,9 +13,14 @@ def index(request):
 
 class InitialView(View):
     template_name = "example/initial.html"
+    success_url = reverse_lazy('example:index')
 
     def get(self, request):
-        return render(request, self.template_name)
+        response = request.session.get('response', False)
+        if ( response ) : del(request.session['response'])
+        ctx = {'response': response}
+
+        return render(request, self.template_name, ctx)
 
     def post(self, request):
         question = request.POST['question']
@@ -36,5 +42,8 @@ class InitialView(View):
             )
         except:
             response = "well...,..."
-        ctx = {'response': response["choices"][0]["text"]}
+        # ctx = {'response': response["choices"][0]["text"]}
+        request.session['response'] = response["choices"][0]["text"]
+        return redirect(request.path)
+
         return render(request, self.template_name, ctx)
