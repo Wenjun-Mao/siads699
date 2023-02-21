@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'social_django',
     'taggit',
     'example.apps.ExampleConfig',
+    'example2.apps.Example2Config',
 ]
 
 MIDDLEWARE = [
