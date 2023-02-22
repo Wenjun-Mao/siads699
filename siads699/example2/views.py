@@ -1,8 +1,10 @@
 from django.http import HttpResponse
-from django.views import View
+from django.views import View, generic
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 import openai
+
+from example2.models import Question
 
 openai.api_key = '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'
 
@@ -42,11 +44,21 @@ class InitialView(View):
                 # frequency_penalty = 0.1
                 # presence_penalty = 0.1
             )
+            response_text = response["choices"][0]["text"]
         except:
-            response = "well...,..."
+            response_text = "well......something was wrong on OpenAI's end.  Try again later."
         # ctx = {'response': response["choices"][0]["text"]}
-        request.session['response'] = response["choices"][0]["text"]
+        request.session['response'] = response_text
         request.session['question'] = question
+
+        # Save to database
+        Question.objects.create(question=question, answer=response_text)
+
         return redirect(request.path)
 
         return render(request, self.template_name, ctx)
+
+
+
+class QuestionListView(generic.ListView):
+    model = Question

@@ -1,0 +1,14 @@
+<h1>Question List</h1>
+<p>
+{% if question_list %}
+<ul>
+  {% for question in question_list %}
+    <li>
+      {{ question.id }} {{ question.question }}  {{ question.answer }}  {{ question.created_at }}
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p>There are no questions in the database.</p>
+{% endif %}
+</p>
