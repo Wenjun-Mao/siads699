@@ -4,7 +4,10 @@
 <ul>
   {% for question in question_list %}
     <li>
-      {{ question.id }} {{ question.question }}  {{ question.answer }}  {{ question.created_at }}
+      <ul>Id: {{ question.id }} </ul>
+      <ul>Question: {{ question.question }}</ul>
+      <ul>Answer: {{ question.answer }}</ul>
+      <ul>Created_at: {{ question.created_at }}</ul>
     </li>
   {% endfor %}
 </ul>
