@@ -56,9 +56,8 @@ class InitialView(View):
 
         return redirect(request.path)
 
-        return render(request, self.template_name, ctx)
-
 
 
 class QuestionListView(generic.ListView):
     model = Question
+    paginate_by = 2
