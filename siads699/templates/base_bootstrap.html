@@ -7,17 +7,23 @@
     <!-- Edit mysite/settings.py and add APP_NAME = 'MADS_Team' or similar -->
     <title>{% block title %}{{ settings.APP_NAME }}{% endblock %}</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
         rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
-        crossorigin="anonymous">
+        crossorigin="anonymous"> -->
 
-    <link rel="stylesheet"
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <link href="assets/img/favicon.jpeg" rel="icon">
+    <link href="assets/img/apple-touch-icon.jpeg" rel="apple-touch-icon">
+
+    <!-- <link rel="stylesheet"
         href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
-        crossorigin="anonymous">
+        crossorigin="anonymous"> -->
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/v4-shims.css"> -->
 
     {% block head %} {% endblock %}
     </head>
@@ -25,7 +31,8 @@
 
     <body>
         <div class="container">
-            {% block navbar %} {% endblock %}
+            {% block header %} {% endblock %}
+            {% block Sidebar %} {% endblock %}
             {% block welcome %} {% endblock %}
             {% block messages %}
                 {% if messages %}
@@ -42,7 +49,7 @@
         
         {% block footer %} {% endblock %}
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" 
         crossorigin="anonymous"></script>
 
@@ -50,6 +57,6 @@
             crossorigin="anonymous"></script>
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
     </body>
 </html>
