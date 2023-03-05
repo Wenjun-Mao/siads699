@@ -5,9 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Edit mysite/settings.py and add APP_NAME = 'MADS_Team' or similar -->
-    {% block title %}
-    <title>{{ settings.APP_NAME }}</title>
-    {% endblock %}
+    <title>{% block title %}{{ settings.APP_NAME }}{% endblock %}</title>
 
 
     {% load static %}
