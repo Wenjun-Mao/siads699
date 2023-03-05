@@ -19,15 +19,15 @@
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">#user_id's Query List</h5>
+          <h5 class="card-title">#user_name's Query List</h5>
           <p>
             <ul>
               {% for question in page_obj %}
                 <li>
-                  <ul>Id: {{ question.id }} </ul>
-                  <ul>Question: {{ question.question }}</ul>
-                  <ul>Answer: {{ question.answer }}</ul>
-                  <ul>Created_at: {{ question.created_at }}</ul>
+                  <ul><strong><span>Id:        </span></strong> {{ question.id }} </ul>
+                  <ul><strong><span>Question:  </span></strong> {{ question.question }}</ul>
+                  <ul><strong><span>Answer:    </span></strong> {{ question.answer }}</ul>
+                  <ul><strong><span>Created_at:</span></strong> {{ question.created_at }}</ul>
                 </li>
               {% empty %}
                 <li>There are no questions in the database.</li>
