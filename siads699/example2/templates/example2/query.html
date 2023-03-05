@@ -15,13 +15,17 @@
       <div class="card-body">
         <h5 class="card-title">#user_name's Query List</h5>
           <label for="dataAnalysis" class="form-label">What question do you have of your sales data?</label>
+
           <form method="post">
               {% csrf_token %}
               <label for="question">Question:</label>
-              <input type="text" id="question" name="question" required>
+              <input type="text" class="form-control" id="question" name="question" required>
               <br>
-              <input type="submit" value="Submit">
+              <input type="submit" class="btn btn-primary" value="Submit">
           </form>
+
+
+
           {% if question %}
               <h2>Question was:</h2>
               <p>{{ question }}</p>
