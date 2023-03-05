@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Used for a default title
-APP_NAME = 'MADSTeam_Samples'   # Add
+APP_NAME = 'MADSTeam_34'   # Add
 
 # Used for static files
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
