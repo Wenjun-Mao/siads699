@@ -14,7 +14,7 @@ def index(request):
 
 
 class InitialView(View):
-    template_name = "example2/initial.html"
+    template_name = "example2/query.html"
     success_url = reverse_lazy('example:index')
 
     def get(self, request):
