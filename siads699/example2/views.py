@@ -60,4 +60,4 @@ class InitialView(View):
 
 class QuestionListView(generic.ListView):
     model = Question
-    paginate_by = 5
+    paginate_by = 2
