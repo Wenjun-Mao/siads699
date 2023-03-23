@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 import openai
 
-from example2.models import Question
+from example3.models import QuestionV3
 
 openai.api_key = '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'
 
@@ -14,7 +14,7 @@ def index(request):
 
 
 class InitialView(View):
-    template_name = "example2/query.html"
+    template_name = "example3/query.html"
     success_url = reverse_lazy('example:index')
 
     def get(self, request):
@@ -42,12 +42,12 @@ class InitialView(View):
         request.session['question'] = question
 
         # Save to database
-        Question.objects.create(question=question, answer=response_text)
+        QuestionV3.objects.create(question=question, answer=response_text)
 
         return redirect(request.path)
 
 
 
 class QuestionListView(generic.ListView):
-    model = Question
+    model = QuestionV3
     paginate_by = 5

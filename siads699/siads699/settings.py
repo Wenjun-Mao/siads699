@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'taggit',
     'example.apps.ExampleConfig',
     'example2.apps.Example2Config',
+    'example3.apps.Example2Config',
 ]
 
 MIDDLEWARE = [
