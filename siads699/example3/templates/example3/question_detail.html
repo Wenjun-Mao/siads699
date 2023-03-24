@@ -1,0 +1,41 @@
+{% extends "base_dashboard3.html" %}
+
+{% block title %}{{ settings.APP_NAME }}{% endblock %}
+
+{% block content %}
+<h1>{{ question.question_text }}</h1>
+<h2>Answer:</h2>
+<p>{{ answer_content }}</p>
+
+{% if question.status == 1 %}
+    <p>Irrelevant answer.</p>
+{% else %}
+    {% if question.status == 2 %}
+        <p>Sorry, error.</p>
+        <form method="post" action="{% url 'retry_second_step' question.id %}">
+            {% csrf_token %}
+            <button type="submit">Retry</button>
+        </form>
+    {% endif %}
+    <form method="post" action="{% url 'accept_answer' question.id %}">
+        {% csrf_token %}
+        <button type="submit">Agree</button>
+    </form>
+{% endif %}
+
+<h3>Disagree? Add your comment:</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+
+<h3>Previous comments:</h3>
+<ul>
+{% for comment in question.comments.all %}
+    <li>{{ comment.user_comment }} - {{ comment.generated_response }}</li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

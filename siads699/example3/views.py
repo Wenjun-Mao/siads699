@@ -42,39 +42,48 @@ class AskQuestionView(View):
 
             if answer_content_1 == "__irrelevant__":
                 status = 1
-                question = QuestionV3.objects.create(
-                    question_text=question_text, first_full_response=full_response, 
-                    model=model, temperature=temperature, status=status, irrelevant=True)
-                return redirect('example3:ask_question')
             else:
                 status = 0
-                question = QuestionV3.objects.create(
-                    question_text=question_text, first_full_response=full_response, model=model, temperature=temperature, status=status)
 
-                # Step 2: Get second_full_response
-                second_prompt = create_prompt(df, stage=2, question=question_text, first_answer=answer_content_1)
-                second_full_response, _, _ = get_openai_response(second_prompt)
-                answer_content_2 = second_full_response['choices'][0]['message']['content'].strip()
+            question = QuestionV3.objects.create(
+                question_text=question_text, first_full_response=full_response,
+                model=model, temperature=temperature, status=status)
 
-                try:
-                    output = get_execute_output(answer_content_2)
-                    question.second_full_response = second_full_response
-                    question.output = output
-                    question.save()
+            return redirect('example3:ask_question', question_id=question.id)
 
-                    # Step 3: Get third_full_response
-                    third_full_response, _, _ = get_openai_response(question_text, accepted_answer=answer_content, executed_output=output, stage=3)
-                    question.third_full_response = third_full_response
-                    question.status = 0
-                    question.save()
 
-                except Exception as e:
-                    question.second_full_response = second_full_response
-                    question.status = 2
-                    question.save()
-                    return redirect('example3:ask_question', question_id=question.id)
+class ProcessAgreementView(View):
+    def post(self, request, question_id):
+        question = get_object_or_404(QuestionV3, id=question_id)
 
-                return redirect('example3:ask_question', question_id=question.id)
+        # Step 2: Get second_full_response
+        accepted_answer = question.first_approved_response if question.first_approved_response else question.first_full_response['choices'][0]['message']['content'].strip()
+        second_prompt = create_prompt(df, stage=2, question=question.question_text, first_answer=accepted_answer)
+        second_full_response, _, _ = get_openai_response(second_prompt)
+        answer_content_2 = second_full_response['choices'][0]['message']['content'].strip()
+
+        try:
+            output = get_execute_output(answer_content_2)
+            question.second_full_response = second_full_response
+            question.output = output
+            question.save()
+
+            # Step 3: Get third_full_response
+            third_prompt = create_prompt(df, stage=3, question=question.question_text,
+                                          first_answer=accepted_answer, second_answer=answer_content_2, output=output)
+            third_full_response, _, _ = get_openai_response(third_prompt)
+            question.third_full_response = third_full_response
+            question.status = 0
+            question.save()
+
+        except Exception as e:
+            question.second_full_response = second_full_response
+            question.status = 2
+            question.save()
+            return redirect('example3:ask_question', question_id=question.id)
+
+        return redirect('example3:ask_question', question_id=question.id)
+
 
 
 def handle_disagreement(question, user_comment):
