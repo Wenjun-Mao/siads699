@@ -10,7 +10,7 @@ app_name = 'example3'
 # ]
 
 urlpatterns = [
-    path('', views00.AskQuestionView.as_view(), name='ask_question'),
+    path('example3', views00.AskQuestionView.as_view(), name='ask_question'),
     path('question/int:question_id/', views00.QuestionDetailView.as_view(), name='question_detail'),
     path('question/int:question_id/accept/', views00.accept_answer, name='accept_answer'),
     path('question/int:question_id/retry/', views00.retry_second_step, name='retry_second_step'),
