@@ -15,7 +15,7 @@ openai.api_key = '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'
 ######### Prepare data #########
 import os
 
-csv_file = os.path.join(os.path.dirname(__file__), 'example3', 'Online_Retail_1000_v2.csv')
+csv_file = os.path.join(os.path.dirname(__file__), 'Online_Retail_1000_v2.csv')
 
 df = pd.read_csv(csv_file)
 # Calculate total sales and add as a new column
