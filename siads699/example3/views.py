@@ -13,7 +13,7 @@ from sqlalchemy import text
 openai.api_key = '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'
 
 ######### Prepare data #########
-df = pd.read_csv('./assets/Online_Retail_1000_v2.csv')
+df = pd.read_csv('Online_Retail_1000_v2.csv')
 # Calculate total sales and add as a new column
 df['TotalSales'] = df['Quantity'] * df['UnitPrice']
 temp_db = create_engine('sqlite:///:memory:', echo=False)
