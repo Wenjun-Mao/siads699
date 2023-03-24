@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Ask a Question</h1>
+    <form method="post" action="{% url 'example3:ask_question' %}">
+        {% csrf_token %}
+        <!-- Add your question input fields here -->
+        <button type="submit">Submit Question</button>
+    </form>
+
+    <hr>
+
+    {% if question %}
+        {% with question.comments.all|last as last_comment %}
+            <h2>Question: {{ question.question_text }}</h2>
+            <h3>Response: {{ last_comment.generated_response|default:question.first_full_response }}</h3>
+        {% endwith %}
+
+        <form method="post" action="{% url 'example3:ask_question' %}">
+            {% csrf_token %}
+            <input type="hidden" name="accepted" value="yes">
+            <button type="submit">Yes</button>
+        </form>
+
+        <form method="get" action="{% url 'example3:handle_comment' question.id %}">
+            {% csrf_token %}
+            <button type="submit">No, I want to add a comment</button>
+        </form>
+
+        {% if question.comments.all %}
+            <h3>Previous Comments:</h3>
+            <ul>
+                {% for comment in question.comments.all %}
+                    <li>
+                        <strong>{{ comment.user_comment }}</strong>
+                        <br>
+                        Generated Response: {{ comment.generated_response }}
+                        {% if not comment.accepted %}
+                            <form method="post" action="{% url 'example3:accept_response' question.id comment.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Accept</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}

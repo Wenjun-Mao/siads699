@@ -1,53 +1,132 @@
-from django.http import HttpResponse
-from django.views import View, generic
-from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
+from .models import QuestionV3, UserComment
+from .forms import UserCommentForm
+
+from .forms import AskQuestionForm, UserCommentForm
+from .chatgpt_utils699_web import create_prompt, get_openai_response, get_execute_output
+
+import pandas as pd
 import openai
-
-from example3.models import QuestionV3
-
+from sqlalchemy import create_engine
+from sqlalchemy import text
 openai.api_key = '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'
 
+######### Prepare data #########
+df = pd.read_csv('assets/Online_Retail_1000_v2.csv')
+# Calculate total sales and add as a new column
+df['TotalSales'] = df['Quantity'] * df['UnitPrice']
+temp_db = create_engine('sqlite:///:memory:', echo=False)
+data = df.to_sql(name='df', con=temp_db)
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the siads699 index.")
-
-
-class InitialView(View):
-    template_name = "example3/query.html"
-    success_url = reverse_lazy('example:index')
-
+######### The Views #########
+class AskQuestionView(View):
     def get(self, request):
-        response = request.session.get('response', False)
-        question = request.session.get('question', False)
-        ctx = {'response': response, 'question': question}
+        form = AskQuestionForm()
+        question_id = request.GET.get('question_id', None)
+        question = None
 
-        return render(request, self.template_name, ctx)
+        if question_id:
+            question = QuestionV3.objects.get(id=question_id)
+
+        context = {'form': form, 'question': question}
+        return render(request, 'example3/query.html', context)
 
     def post(self, request):
-        question = request.POST['question']
-        try:
-            response = openai.Completion.create(
-                model='davinci:ft-personal-2023-01-15-03-48-41',
-                prompt='pretend to be a data analyst.' + question + '?',
-                max_tokens=50,
-                stop=['Sentence'],
-                temperature=0.8,
-            )
-            response_text = response["choices"][0]["text"]
-        except:
-            response_text = "well......something was wrong on OpenAI's end.  Try again later."
-        # ctx = {'response': response["choices"][0]["text"]}
-        request.session['response'] = response_text
-        request.session['question'] = question
+        form = AskQuestionForm(request.POST)
+        if form.is_valid():
+            question_text = form.cleaned_data['question']
+            first_prompt = create_prompt(df, stage=1, question=question_text)
+            full_response, model, temperature = get_openai_response(first_prompt)
+            answer_content_1 = full_response['choices'][0]['message']['content'].strip()
 
-        # Save to database
-        QuestionV3.objects.create(question=question, answer=response_text)
+            if answer_content_1 == "__irrelevant__":
+                status = 1
+                question = QuestionV3.objects.create(
+                    question_text=question_text, first_full_response=full_response, 
+                    model=model, temperature=temperature, status=status, irrelevant=True)
+                return redirect('example3:ask_question')
+            else:
+                status = 0
+                question = QuestionV3.objects.create(
+                    question_text=question_text, first_full_response=full_response, model=model, temperature=temperature, status=status)
 
-        return redirect(request.path)
+                # Step 2: Get second_full_response
+                second_prompt = create_prompt(df, stage=2, question=question_text, first_answer=answer_content_1)
+                second_full_response, _, _ = get_openai_response(second_prompt)
+                answer_content_2 = second_full_response['choices'][0]['message']['content'].strip()
+
+                try:
+                    output = get_execute_output(answer_content_2)
+                    question.second_full_response = second_full_response
+                    question.output = output
+                    question.save()
+
+                    # Step 3: Get third_full_response
+                    third_full_response, _, _ = get_openai_response(question_text, accepted_answer=answer_content, executed_output=output, stage=3)
+                    question.third_full_response = third_full_response
+                    question.status = 0
+                    question.save()
+
+                except Exception as e:
+                    question.second_full_response = second_full_response
+                    question.status = 2
+                    question.save()
+                    return redirect('example3:ask_question', question_id=question.id)
+
+                return redirect('example3:ask_question', question_id=question.id)
 
 
+def handle_disagreement(question, user_comment):
+    first_answer = question.first_approved_response if question.first_approved_response else question.first_full_response['choices'][0]['message']['content'].strip()
+    new_prompt = create_prompt(df, stage=1, question=question.question_text, first_answer=first_answer, comments=user_comment)
+    new_response, _, _ = get_openai_response(new_prompt)
+    answer_regen = new_response['choices'][0]['message']['content'].strip()
 
-class QuestionListView(generic.ListView):
-    model = QuestionV3
-    paginate_by = 5
+    return answer_regen
+
+
+class UserCommentView(View):
+    def post(self, request, question_id):
+        form = UserCommentForm(request.POST)
+        question = get_object_or_404(QuestionV3, id=question_id)
+
+        if form.is_valid():
+            user_comment = form.cleaned_data['user_comment']
+            accepted = form.cleaned_data['accepted']
+
+            if accepted:
+                question.first_approved_response = question.first_full_response
+                question.save()
+            else:
+                user_comment_instance = UserComment.objects.create(
+                    question=question,
+                    user_comment=user_comment
+                )
+
+                new_prompt = create_prompt(question.question_text, user_comment=user_comment_instance.user_comment, stage=1)
+                generated_response, model, temperature = get_openai_response(new_prompt)
+                answer_content = generated_response['choices'][0]['message']['content'].strip()
+
+                user_comment_instance.generated_response = generated_response
+                user_comment_instance.save()
+
+            user_comment_form = UserCommentForm(initial={'question': question.id})
+            return render(request, 'example3/query.html', {'question': question, 'user_comment_form': user_comment_form, 'answer_content': answer_content})
+
+        return render(request, 'example3/query.html', {'question': question, 'form': form})
+
+
+class AcceptResponseView(View):
+    def post(self, request, question_id, comment_id):
+        question = get_object_or_404(QuestionV3, id=question_id)
+        comment = get_object_or_404(UserComment, id=comment_id)
+
+        comment.accepted = True
+        comment.save()
+
+        if not question.first_approved_response:
+            question.first_approved_response = comment.generated_response
+            question.save()
+
+        return redirect('example3:ask_question')
