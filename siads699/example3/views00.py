@@ -51,7 +51,7 @@ class AskQuestionView(View):
 
             question.save()
 
-            return redirect('example3/question_detail', question_id=question.id)
+            return redirect('question_detail', question_id=question.id)
 
         return render(request, 'example3/ask_question.html', {'form': form})
 
@@ -85,7 +85,7 @@ class QuestionDetailView(View):
             )
             user_comment_obj.save()
 
-            return redirect('example3/question_detail', question_id=question.id)
+            return redirect('question_detail', question_id=question.id)
 
         return render(request, 'example3/question_detail.html', {
             'question': question,
@@ -113,7 +113,7 @@ def accept_answer(request, question_id):
         question.second_full_response = full_response
         question.save()
 
-        return redirect('example3/question_detail', question_id=question.id)
+        return redirect('question_detail', question_id=question.id)
 
     return render(request, 'example3/question_detail.html', {'question': question})
 
@@ -136,7 +136,7 @@ def retry_second_step(request, question_id):
         question.second_full_response = full_response
         question.save()
 
-        return redirect('example3/question_detail', question_id=question.id)
+        return redirect('question_detail', question_id=question.id)
 
     return render(request, 'example3/question_detail.html', {'question': question})
 
@@ -156,7 +156,7 @@ def proceed_to_third_step(request, question_id):
         question.third_answer = third_answer
         question.save()
 
-        return redirect('example3/question_detail', question_id=question.id)
+        return redirect('question_detail', question_id=question.id)
 
     return render(request, 'example3/question_detail.html', {'question': question})
 
@@ -165,7 +165,7 @@ def accept_third_answer(request, question_id):
     if request.method == 'POST':
         question.status = 0
         question.save()
-        return redirect('example3/question_detail', question_id=question.id)
+        return redirect('question_detail', question_id=question.id)
 
     return render(request, 'example3/question_detail.html', {'question': question})
 
@@ -174,6 +174,6 @@ def reject_third_answer(request, question_id):
     if request.method == 'POST':
         question.status = 3
         question.save()
-        return redirect('example3/question_detail', question_id=question.id)
+        return redirect('question_detail', question_id=question.id)
 
     return render(request, 'example3/question_detail.html', {'question': question})
