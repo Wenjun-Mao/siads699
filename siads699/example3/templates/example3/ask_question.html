@@ -1,0 +1,12 @@
+{% extends "base_dashboard3.html" %}
+
+{% block title %}{{ settings.APP_NAME }}{% endblock %}
+
+{% block content %}
+<h1>Ask a question</h1>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Submit</button>
+</form>
+{% endblock %}
