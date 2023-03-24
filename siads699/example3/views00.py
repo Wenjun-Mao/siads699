@@ -27,7 +27,7 @@ data = df.to_sql(name='df', con=temp_db)
 class AskQuestionView(View):
     def get(self, request):
         form = AskQuestionForm()
-        return render(request, 'ask_question.html', {'form': form})
+        return render(request, 'example3/ask_question.html', {'form': form})
 
     def post(self, request):
         form = AskQuestionForm(request.POST)
@@ -51,16 +51,16 @@ class AskQuestionView(View):
 
             question.save()
 
-            return redirect('question_detail', question_id=question.id)
+            return redirect('example3/question_detail', question_id=question.id)
 
-        return render(request, 'ask_question.html', {'form': form})
+        return render(request, 'example3/ask_question.html', {'form': form})
 
 class QuestionDetailView(View):
     def get(self, request, question_id):
         question = get_object_or_404(QuestionV3, id=question_id)
         answer_content = question.first_full_response['choices'][0]['message']['content'].strip()
         form = UserCommentForm()
-        return render(request, 'question_detail.html', {
+        return render(request, 'example3/question_detail.html', {
             'question': question,
             'answer_content': answer_content,
             'form': form
@@ -85,9 +85,9 @@ class QuestionDetailView(View):
             )
             user_comment_obj.save()
 
-            return redirect('question_detail', question_id=question.id)
+            return redirect('example3/question_detail', question_id=question.id)
 
-        return render(request, 'question_detail.html', {
+        return render(request, 'example3/question_detail.html', {
             'question': question,
             'answer_content': answer_content,
             'form': form
@@ -113,9 +113,9 @@ def accept_answer(request, question_id):
         question.second_full_response = full_response
         question.save()
 
-        return redirect('question_detail', question_id=question.id)
+        return redirect('example3/question_detail', question_id=question.id)
 
-    return render(request, 'question_detail.html', {'question': question})
+    return render(request, 'example3/question_detail.html', {'question': question})
 
 def retry_second_step(request, question_id):
     question = get_object_or_404(QuestionV3, id=question_id)
@@ -136,9 +136,9 @@ def retry_second_step(request, question_id):
         question.second_full_response = full_response
         question.save()
 
-        return redirect('question_detail', question_id=question.id)
+        return redirect('example3/question_detail', question_id=question.id)
 
-    return render(request, 'question_detail.html', {'question': question})
+    return render(request, 'example3/question_detail.html', {'question': question})
 
 def proceed_to_third_step(request, question_id):
     question = get_object_or_404(QuestionV3, id=question_id)
@@ -156,24 +156,24 @@ def proceed_to_third_step(request, question_id):
         question.third_answer = third_answer
         question.save()
 
-        return redirect('question_detail', question_id=question.id)
+        return redirect('example3/question_detail', question_id=question.id)
 
-    return render(request, 'question_detail.html', {'question': question})
+    return render(request, 'example3/question_detail.html', {'question': question})
 
 def accept_third_answer(request, question_id):
     question = get_object_or_404(QuestionV3, id=question_id)
     if request.method == 'POST':
         question.status = 0
         question.save()
-        return redirect('question_detail', question_id=question.id)
+        return redirect('example3/question_detail', question_id=question.id)
 
-    return render(request, 'question_detail.html', {'question': question})
+    return render(request, 'example3/question_detail.html', {'question': question})
 
 def reject_third_answer(request, question_id):
     question = get_object_or_404(QuestionV3, id=question_id)
     if request.method == 'POST':
         question.status = 3
         question.save()
-        return redirect('question_detail', question_id=question.id)
+        return redirect('example3/question_detail', question_id=question.id)
 
-    return render(request, 'question_detail.html', {'question': question})
+    return render(request, 'example3/question_detail.html', {'question': question})
