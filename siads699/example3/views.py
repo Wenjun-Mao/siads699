@@ -92,7 +92,7 @@ class Step2ProcessView(View):
         try:
             execute_output = get_execute_output(second_full_response, temp_db)
         except Exception as e:
-            # print("Error in get_execute_output", e)
+            print("Error in get_execute_output", e)
             execute_output = "Error"
         
         question_obj.execute_output = execute_output
