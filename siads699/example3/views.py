@@ -36,7 +36,7 @@ class Step1AskQuestionView(View):
     def post(self, request):
         question_text = request.POST.get('question_text', False)
         first_prompt = create_prompt(df, stage=1, question=question_text)
-        print('first_prompt: ', first_prompt)
+        # print('first_prompt: ', first_prompt)
         try:
             full_response_1, model, temperature = get_openai_response(first_prompt)
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
@@ -52,7 +52,7 @@ class Step1AskQuestionView(View):
                 status=status
             )
         except Exception as e:
-            print("Error in get_openai_response", e)
+            # print("Error in get_openai_response", e)
             answer_content_1 = "Sorry, I cannot answer your question. Please try again."
 
         request.session['answer_text'] = answer_content_1
@@ -61,37 +61,10 @@ class Step1AskQuestionView(View):
         return redirect(request.path)
 
 
+# class Step2UserCommentView(View):
 
-class AskQuestionView(View):
-    def get(self, request):
-        form = AskQuestionForm()
-        question_id = request.GET.get('question_id', None)
-        question = None
 
-        if question_id:
-            question = QuestionV3.objects.get(id=question_id)
 
-        context = {'form': form, 'question': question}
-        return render(request, 'example3/query.html', context)
-
-    def post(self, request):
-        form = AskQuestionForm(request.POST)
-        if form.is_valid():
-            question_text = form.cleaned_data['question']
-            first_prompt = create_prompt(df, stage=1, question=question_text)
-            full_response, model, temperature = get_openai_response(first_prompt)
-            answer_content_1 = full_response['choices'][0]['message']['content'].strip()
-
-            if answer_content_1 == "__irrelevant__":
-                status = 1
-            else:
-                status = 0
-
-            question = QuestionV3.objects.create(
-                question_text=question_text, first_full_response=full_response,
-                model=model, temperature=temperature, status=status)
-
-            return redirect('example3:ask_question', question_id=question.id)
 
 
 class ProcessAgreementView(View):
