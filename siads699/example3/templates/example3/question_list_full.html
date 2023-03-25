@@ -30,9 +30,9 @@
                 <li class="list-group-item">
                   <ul><strong><span>Question Id:        </span></strong> {{ question.id }} </ul>
                   <ul><strong><span>Question:  </span></strong> {{ question.question_text }}</ul>
-                  <ul><strong><span>First Answer:    </span></strong> {{ question.first_full_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
-                  <ul><strong><span>Accepted Answer:   </span></strong> {{ question.first_approved_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
-                  <ul><strong><span>Final Answer:   </span></strong> {{ question.third_full_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
+                  <ul><strong><span>First Answer:    </span></strong> {{ question.first_full_response }}</ul>
+                  <ul><strong><span>Accepted Answer:   </span></strong> {{ question.first_approved_response }}</ul>
+                  <ul><strong><span>Final Answer:   </span></strong> {{ question.third_full_response }}</ul>
                   <ul><strong><span>Execute Output:   </span></strong> {{ question.execute_output }}</ul>
                   <ul><strong><span>Question Status#:   </span></strong> {{ question.status }}</ul>
                   <ul><strong><span>Model Info:   </span></strong> {{ question.model }} Temperature: {{ question.temperature }}</ul>
