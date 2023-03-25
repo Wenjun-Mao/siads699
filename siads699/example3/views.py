@@ -38,7 +38,12 @@ class Step1AskQuestionView(View):
         question_text = request.POST.get('question_text', False)
         first_prompt = create_prompt(df, stage=1, question=question_text)
         model_selected = request.POST.get('model_selected', False)
-        temperature_selected = 0.2
+        temperature_selected_str = float(request.POST.get('temperature_selected', False))
+        try:
+            temperature_selected = float(temperature_selected_str)
+        except ValueError:
+            # Handle the error, e.g., set a default value or return an error message
+            temperature_selected = 0.2
         
         try:
             full_response_1, model, temperature = get_openai_response(first_prompt, model=model_selected, temperature=temperature_selected)

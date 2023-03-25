@@ -40,7 +40,14 @@
                 </label>
               </div>
               <br>
-              
+
+              <select class="form-control" name="temperature_selected" id="dropdown_value">
+                {% for value in '0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0'|split:',' %}
+                  <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+              <br>
+
               <input type="text" class="form-control" id="question" name="question_text" required>
               <br>
               <input type="submit" class="btn btn-primary" value="Submit My Question">
