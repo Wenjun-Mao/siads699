@@ -61,6 +61,7 @@ def get_openai_response(prompt, temperature=0.2, max_tokens=1000, model='gpt-3.5
             stream=False
         )
     # answer_content = full_response['choices'][0]['message']['content'].strip()
+    model = full_response['model']
     return full_response, model, temperature
 
 def get_execute_output(second_answer, db_name):
