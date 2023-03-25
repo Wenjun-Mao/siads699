@@ -81,8 +81,9 @@ class Step2AddCommentView(View):
         full_response_1_new, _, _ = get_openai_response(first_prompt_new)
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
 
-        
-        print('question_obj.id: ', question_obj.id)
+        test_q = request.session.get('answer_text')
+        print('test_q: ', test_q)
+
 
         comment_obj = UserComment.objects.create(
             question=question_obj,
