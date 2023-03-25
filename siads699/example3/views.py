@@ -4,8 +4,6 @@ from .models import QuestionV3, UserComment
 
 import json
 
-from django.http import HttpResponse
-
 # from .forms import AskQuestionForm, UserCommentForm
 from .chatgpt_utils699_web import create_prompt, get_openai_response, get_execute_output
 
@@ -137,3 +135,11 @@ class Step2AddCommentView(View):
         request.session['comment_id'] = comment_obj.id
 
         return redirect('example3:ask_question')
+
+
+def question_list(request):
+    questions = QuestionV3.objects.all()
+    context = {
+        'questions': questions
+    }
+    return render(request, 'example3/question_list2.html', context)
