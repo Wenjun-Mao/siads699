@@ -58,6 +58,7 @@ class Step1AskQuestionView(View):
         request.session['question_id'] = question_obj.id
         request.session['answer_text'] = answer_content_1
         request.session['question_text'] = question_text
+        request.session['comment_id'] = False
 
         return redirect(request.path)
 
@@ -127,7 +128,7 @@ class Step2AddCommentView(View):
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
 
         comment_obj = UserComment.objects.create(
-            question=question_obj,
+            question_obj=question_obj,
             comment_text=comment_text,
             generated_full_response=full_response_1_new
         )
