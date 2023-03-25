@@ -36,6 +36,7 @@ class Step1AskQuestionView(View):
     def post(self, request):
         question_text = request.POST.get('question_text', False)
         first_prompt = create_prompt(df, stage=1, question=question_text)
+        print('first_prompt: ', first_prompt)
         try:
             full_response_1, model, temperature = get_openai_response(first_prompt)
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
@@ -50,7 +51,8 @@ class Step1AskQuestionView(View):
                 temperature=temperature,
                 status=status
             )
-        except:
+        except Exception as e:
+            print("Error in get_openai_response", e)
             answer_content_1 = "Sorry, I cannot answer your question. Please try again."
 
         request.session['answer_text'] = answer_content_1
