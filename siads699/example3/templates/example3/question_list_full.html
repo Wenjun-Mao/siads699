@@ -1,0 +1,97 @@
+{% extends "base_dashboard3.html" %}
+
+{% load custom_filters %}
+
+{% block title %}{{ settings.APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="pagetitle">
+  <h1>Query Records</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="">Home</a></li>
+      <li class="breadcrumb-item">Pages</li>
+      <li class="breadcrumb-item active">Blank</li>
+    </ol>
+  </nav>
+</div><!-- End Page Title -->
+
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">#user_name's Query List</h5>
+          <p>
+            <ul class="list-group list-group-flush">
+              {% for question in object_list %}
+                <li class="list-group-item">
+                  <ul><strong><span>Question Id:        </span></strong> {{ question.id }} </ul>
+                  <ul><strong><span>Question:  </span></strong> {{ question.question_text }}</ul>
+                  <ul><strong><span>First Answer:    </span></strong> {{ question.first_full_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
+                  <ul><strong><span>Accepted Answer:   </span></strong> {{ question.first_approved_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
+                  <ul><strong><span>Final Answer:   </span></strong> {{ question.third_full_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
+                  <ul><strong><span>Execute Output:   </span></strong> {{ question.execute_output }}</ul>
+                  <ul><strong><span>Question Status#:   </span></strong> {{ question.status }}</ul>
+                  <ul><strong><span>Model Info:   </span></strong> {{ question.model }} Temperature: {{ question.temperature }}</ul>
+                  <ul><strong><span>Created_at:</span></strong> {{ question.created_at }}</ul>
+                </li>
+              {% empty %}
+                <li class="list-group-item">There are no questions in the database.</li>
+              {% endfor %}
+            </ul>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-lg-12">
+
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+
+        <!-- Pagination with icons -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo; first</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+              </li>
+            {% endif %}
+
+
+            <li class="page-item">
+              <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+            </li>
+    
+            
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav><!-- End Pagination with icons -->
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+</section>
+
+{% endblock %}

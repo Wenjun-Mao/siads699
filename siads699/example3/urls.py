@@ -14,4 +14,5 @@ urlpatterns = [
     path('accept_answer', views.Step2ProcessView.as_view(), name='accept_answer'),
     path('addcomment', views.Step2AddCommentView.as_view(), name='add_comment'),
     path('list/', views.QuestionListView.as_view(), name='question_list'),
+    path('list_full/', views.QuestionListViewFull.as_view(), name='question_list'),
 ]

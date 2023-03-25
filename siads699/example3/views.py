@@ -145,3 +145,8 @@ class QuestionListView(generic.ListView):
     model = QuestionV3
     paginate_by = 5
     template_name = 'example3/question_list.html'
+
+class QuestionListViewFull(generic.ListView):
+    model = QuestionV3
+    paginate_by = 5
+    template_name = 'example3/question_list.html'
