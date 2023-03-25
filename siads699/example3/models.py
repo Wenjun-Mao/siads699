@@ -20,7 +20,7 @@ class QuestionV3(models.Model):
         return self.question
 
 class UserComment(models.Model):
-    question_text = models.ForeignKey(QuestionV3, on_delete=models.CASCADE, related_name="comments")
+    question = models.ForeignKey(QuestionV3, on_delete=models.CASCADE, related_name="comments")
     comment_text = models.CharField(max_length=65535, blank=True)
     generated_response = models.CharField(max_length=65535, blank=True)
     accepted = models.BooleanField(default=False)

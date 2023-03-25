@@ -56,7 +56,7 @@ class Step1AskQuestionView(View):
             # print("Error in get_openai_response", e)
             answer_content_1 = "Sorry, I cannot answer your question. Please try again."
 
-        request.session['question_obj'] = question_obj
+        request.session['question_id'] = question_obj.id
         request.session['answer_text'] = answer_content_1
         request.session['question_text'] = question_text
 
@@ -78,12 +78,16 @@ class Step2AddCommentView(View):
         first_prompt_new = create_prompt(df, stage=1, question=question_text, comments=comment_text, first_answer=answer_text)
         full_response_1_new, _, _ = get_openai_response(first_prompt_new)
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
-        answer_obj = UserComment.objects.create(
-            question_text=question_obj,
+
+        question_obj = QuestionV3.objects.get(id=request.session.get('question_id'))
+
+        comment_obj = UserComment.objects.create(
+            question=question_obj,
             comment_text=comment_text,
             generated_response=answer_content_1_new
         )
         request.session['answer_text'] = answer_content_1_new
+        request.session['comment_id'] = comment_obj.id
 
         return redirect('example3:ask_question')
 
