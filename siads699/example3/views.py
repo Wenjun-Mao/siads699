@@ -71,15 +71,15 @@ class Step2ProcessView(View):
 class Step2AddCommentView(View):
     def post(self, request, *args, **kwargs):
         # handle the POST request here
-        question_text = request.POST.get('question_text', False)
-        answer_text = request.POST.get('answer_text', False)
         comment_text = request.POST.get('comment_text', False)
-        question_obj = request.session.get('question_obj', False)
+        question_obj = QuestionV3.objects.get(id=request.session.get('question_id'))
+        question_text = question_obj.question_text
+        answer_text = question_obj.first_full_response['choices'][0]['message']['content'].strip()
         first_prompt_new = create_prompt(df, stage=1, question=question_text, comments=comment_text, first_answer=answer_text)
         full_response_1_new, _, _ = get_openai_response(first_prompt_new)
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
 
-        question_obj = QuestionV3.objects.get(id=request.session.get('question_id'))
+        
         print('question_obj.id: ', question_obj.id)
 
         comment_obj = UserComment.objects.create(
