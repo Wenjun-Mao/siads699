@@ -50,14 +50,14 @@ class Step1AskQuestionView(View):
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
             if answer_content_1 == "__irrelevant__":
                 status = 1
-            # else:
-            #     status = 0
+            else:
+                status = 99
             question_obj = QuestionV3.objects.create(
                 question_text=question_text,
                 first_full_response=full_response_1,
                 model=model,
                 temperature=temperature,
-                # status=status
+                status=status
             )
         except Exception as e:
             answer_content_1 = "Sorry, I cannot answer your question. Please try again."
