@@ -58,6 +58,7 @@ class Step1AskQuestionView(View):
         request.session['question_id'] = question_obj.id
         request.session['answer_text'] = answer_content_1
         request.session['question_text'] = question_text
+        # clear the comment_id so it doesn't get carried over to the next question
         request.session['comment_id'] = False
 
         return redirect(request.path)
