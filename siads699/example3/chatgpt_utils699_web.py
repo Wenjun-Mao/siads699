@@ -74,6 +74,11 @@ def create_prompt(df, stage, question, first_answer=None, comments=None, second_
     cols = ','.join(str(col) for col in df.columns)
     prompt = f'You are a sales analyst. My data is a {data_format} named {table_name}, the columns are: [{cols}]\nThe question I\'m trying to answer is: QUESTION: {question}\n'
 
+    if comments:
+        print('comments: ', comments)
+        print('question: ', question)
+        print('prompt: ', prompt)
+
     if stage == 1:
         prompt += 'Explain the logic step by step.\n'
         prompt += 'Now, without writing any code, just explain the logic, how to find answer to the following questions, do it step by step.'
