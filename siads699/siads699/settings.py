@@ -19,6 +19,9 @@ import openai
 dotenv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
 load_dotenv(dotenv_path)
 openai.api_key = os.environ["OPENAI_API_KEY"]
+print("OPENAI_API_KEY: ", os.environ["OPENAI_API_KEY"])
+print(openai.api_key)
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
