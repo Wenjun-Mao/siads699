@@ -69,20 +69,6 @@ def get_execute_output(second_answer, db_name):
         execute_output = result.all()
     return execute_output
 
-question_list = [
-    """What are the top 3 stores""",
-    """What is the top selling product""",
-    """What is the name of the top selling product""",
-    """What is the name of the top selling product and how much did it sell""",
-    """How many sales did the tampa store have""",
-    """What was the count of invoices at the tampa store""",
-    """Who was the top customer""",
-    """Who bought the most products""",
-    """What was the worst selling product""",
-    """What is the capital of Texas""",
-    """who will win the super bowl"""
-]
-
 def create_prompt(df, stage, question, first_answer=None, comments=None, second_answer=None, output=None, table_name='df', language='SQL'):
     data_format = 'pandas dataframe' if language == 'python' else 'table'
     cols = ','.join(str(col) for col in df.columns)

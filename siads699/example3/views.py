@@ -3,7 +3,7 @@ from django.views import View
 from .models import QuestionV3, UserComment
 from .forms import UserCommentForm
 
-from .forms import AskQuestionForm, UserCommentForm
+# from .forms import AskQuestionForm, UserCommentForm
 from .chatgpt_utils699_web import create_prompt, get_openai_response, get_execute_output
 
 import pandas as pd
@@ -15,7 +15,7 @@ openai.api_key = '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'
 ######### Prepare data #########
 import os
 
-csv_file = os.path.join(os.path.dirname(__file__), 'Online_Retail_1000_v2.csv')
+csv_file = os.path.join(os.path.dirname(__file__), 'assets', 'Online_Retail_1000_v2.csv')
 
 df = pd.read_csv(csv_file)
 # Calculate total sales and add as a new column
@@ -24,6 +24,42 @@ temp_db = create_engine('sqlite:///:memory:', echo=False)
 data = df.to_sql(name='df', con=temp_db)
 
 ######### The Views #########
+class Step1AskQuestionView(View):
+    template_name = "example3/query_main.html"
+    def get(self, request):
+        answer_text = request.session.get('answer_text', False)
+        question_text = request.session.get('question_text', False)
+        ctx = {'answer_text': answer_text, 'question_text': question_text}
+
+        return render(request, self.template_name, ctx)
+
+    def post(self, request):
+        question_text = request.POST.get('question_text', False)
+        first_prompt = create_prompt(df, stage=1, question=question_text)
+        try:
+            full_response_1, model, temperature = get_openai_response(first_prompt)
+            answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
+            if answer_content_1 == "__irrelevant__":
+                status = 1
+            else:
+                status = 0
+            QuestionV3.objects.create(
+                question_text=question_text,
+                first_full_response=full_response_1,
+                model=model,
+                temperature=temperature,
+                status=status
+            )
+        except:
+            answer_content_1 = "Sorry, I cannot answer your question. Please try again."
+
+        request.session['answer_text'] = answer_content_1
+        request.session['question_text'] = question_text
+
+        return redirect(request.path)
+
+
+
 class AskQuestionView(View):
     def get(self, request):
         form = AskQuestionForm()

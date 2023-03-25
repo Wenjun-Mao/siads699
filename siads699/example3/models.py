@@ -3,8 +3,7 @@ from django.db import models
 class QuestionV3(models.Model):
     question_text = models.CharField(max_length=200)
     first_full_response = models.CharField(max_length=65535)
-    irrelevant = models.BooleanField(default=False)
-    first_approved_response = models.CharField(max_length=65535, blank=True, null=True)
+    first_approved_response = models.CharField(max_length=65535, null=True)
     second_full_response = models.CharField(max_length=65535, null=True)
     third_full_response = models.CharField(max_length=65535, null=True)
     output = models.CharField(max_length=1000, null=True)

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views00
+from . import views
 
 app_name = 'example3'
 
@@ -10,11 +10,11 @@ app_name = 'example3'
 # ]
 
 urlpatterns = [
-    path('', views00.AskQuestionView.as_view(), name='ask_question'),
-    path('question/int:question_id/', views00.QuestionDetailView.as_view(), name='question_detail'),
-    path('question/int:question_id/accept/', views00.accept_answer, name='accept_answer'),
-    path('question/int:question_id/retry/', views00.retry_second_step, name='retry_second_step'),
-    path('question/int:question_id/proceed_to_third_step/', views00.proceed_to_third_step, name='proceed_to_third_step'),
-    path('question/int:question_id/accept_third_answer/', views00.accept_third_answer, name='accept_third_answer'),
-    path('question/int:question_id/reject_third_answer/', views00.reject_third_answer, name='reject_third_answer'),
+    path('', views.AskQuestionView.as_view(), name='ask_question'),
+    # path('question/int:question_id/', views00.QuestionDetailView.as_view(), name='question_detail'),
+    # path('question/int:question_id/accept/', views00.accept_answer, name='accept_answer'),
+    # path('question/int:question_id/retry/', views00.retry_second_step, name='retry_second_step'),
+    # path('question/int:question_id/proceed_to_third_step/', views00.proceed_to_third_step, name='proceed_to_third_step'),
+    # path('question/int:question_id/accept_third_answer/', views00.accept_third_answer, name='accept_third_answer'),
+    # path('question/int:question_id/reject_third_answer/', views00.reject_third_answer, name='reject_third_answer'),
 ]

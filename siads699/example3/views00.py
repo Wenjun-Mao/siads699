@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .models import QuestionV3, UserComment
-from .forms import AskQuestionForm, UserCommentForm
+# from .forms import AskQuestionForm, UserCommentForm
 
 from .forms import AskQuestionForm, UserCommentForm
 from .chatgpt_utils699_web import create_prompt, get_openai_response, get_execute_output
@@ -15,7 +15,7 @@ openai.api_key = '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'
 ######### Prepare data #########
 import os
 
-csv_file = os.path.join(os.path.dirname(__file__), 'Online_Retail_1000_v2.csv')
+csv_file = os.path.join(os.path.dirname(__file__), 'assets', 'Online_Retail_1000_v2.csv')
 
 df = pd.read_csv(csv_file)
 # Calculate total sales and add as a new column
