@@ -37,7 +37,8 @@ class Step1AskQuestionView(View):
     def post(self, request):
         question_text = request.POST.get('question_text', False)
         first_prompt = create_prompt(df, stage=1, question=question_text)
-
+        model_selected = request.POST.get('model_selected', False)
+        print(model_selected)
         try:
             full_response_1, model, temperature = get_openai_response(first_prompt)
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()

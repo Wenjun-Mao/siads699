@@ -19,7 +19,27 @@
 
           <form method="post" action="{% url 'example3:ask_question' %}">
               {% csrf_token %}
-              <!-- <label for="question">Question:</label> -->
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="model_selected" id="choice1" value="gpt-3.5-turbo" checked>
+                <label class="form-check-label" for="choice1">
+                  gpt-3.5-turbo
+                </label>
+              </div>
+              
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="model_selected" id="choice2" value="gpt-4">
+                <label class="form-check-label" for="choice2">
+                  gpt-4
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="model_selected" id="choice3" value="gpt-4-32k">
+                <label class="form-check-label" for="choice3">
+                  gpt-4-32k
+                </label>
+              </div>
+
               <input type="text" class="form-control" id="question" name="question_text" required>
               <br>
               <input type="submit" class="btn btn-primary" value="Submit My Question">
