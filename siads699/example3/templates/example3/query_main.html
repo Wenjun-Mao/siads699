@@ -89,7 +89,7 @@
             <br>
             <form method="post" action="{% url 'example3:add_comment' %}" id="comment-form" style="display: none;">
                 {% csrf_token %}
-                <input type="text" class="form-control" id="comment-text" name="comment_text" required>
+                <textarea class="form-control" id="comment-text" name="comment_text" required></textarea>
                 <br>
                 <button type="submit" class="btn btn-primary">Submit My Comment</button>
             </form>
