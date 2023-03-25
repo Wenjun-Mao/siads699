@@ -90,7 +90,7 @@ class Step2ProcessView(View):
         second_full_response, _, _ = get_openai_response(second_prompt)
         answer_content_2 = second_full_response['choices'][0]['message']['content'].strip()
         try:
-            execute_output = get_execute_output(second_full_response, temp_db)
+            execute_output = get_execute_output(answer_content_2, temp_db)
         except Exception as e:
             print("Error in get_execute_output", e)
             execute_output = "Error"
