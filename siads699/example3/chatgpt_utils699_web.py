@@ -77,6 +77,7 @@ def create_prompt(df, stage, question, first_answer=None, comments=None, second_
     if comments:
         print('comments: ', comments)
         print('question: ', question)
+        print('first_answer: ', first_answer)
         print('prompt: ', prompt)
 
     if stage == 1:

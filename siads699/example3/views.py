@@ -80,6 +80,7 @@ class Step2AddCommentView(View):
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
 
         question_obj = QuestionV3.objects.get(id=request.session.get('question_id'))
+        print('question_obj.id: ', question_obj.id)
 
         comment_obj = UserComment.objects.create(
             question=question_obj,
