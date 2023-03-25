@@ -68,7 +68,7 @@ class Step2ProcessView(View):
 
     def post(self, request, *args, **kwargs):
         # handle the POST request here
-        return HttpResponse("This is a placeholder view with a POST method.")
+        return HttpResponse("This is a placeholder Step2ProcessView with a POST method.")
 
 class Step2AddCommentView(View):
     def get(self, request, *args, **kwargs):
@@ -76,7 +76,7 @@ class Step2AddCommentView(View):
 
     def post(self, request, *args, **kwargs):
         # handle the POST request here
-        return HttpResponse("This is a placeholder view with a POST method.")
+        return HttpResponse("This is a placeholder Step2AddCommentView with a POST method.")
 
 
 
