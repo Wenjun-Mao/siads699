@@ -3,8 +3,6 @@ import openai
 from sqlalchemy import text
 import datetime
 
-openai.api_key = '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'
-
 # create a chatGPT_session class that takes a question each time and stores the response into a prompt
 class ChatGPT_session:
     def __init__(self, user_id=None, max_tokens=3000, temperature=0.8, model='gpt-3.5-turbo', max_history=5):

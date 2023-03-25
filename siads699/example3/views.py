@@ -45,7 +45,7 @@ class Step1AskQuestionView(View):
                 status = 1
             else:
                 status = 0
-            QuestionV3.objects.create(
+            question_obj = QuestionV3.objects.create(
                 question_text=question_text,
                 first_full_response=full_response_1,
                 model=model,
@@ -56,6 +56,7 @@ class Step1AskQuestionView(View):
             # print("Error in get_openai_response", e)
             answer_content_1 = "Sorry, I cannot answer your question. Please try again."
 
+        request.session['question_obj'] = question_obj
         request.session['answer_text'] = answer_content_1
         request.session['question_text'] = question_text
 
@@ -63,20 +64,28 @@ class Step1AskQuestionView(View):
 
 
 class Step2ProcessView(View):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse("This is a placeholder view.")
-
     def post(self, request, *args, **kwargs):
         # handle the POST request here
-        return HttpResponse("This is a placeholder Step2ProcessView with a POST method.")
+        return redirect('example3:ask_question')
 
 class Step2AddCommentView(View):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse("This is a placeholder view.")
-
     def post(self, request, *args, **kwargs):
         # handle the POST request here
-        return HttpResponse("This is a placeholder Step2AddCommentView with a POST method.")
+        question_text = request.POST.get('question_text', False)
+        answer_text = request.POST.get('answer_text', False)
+        comment_text = request.POST.get('comment_text', False)
+        question_obj = request.session.get('question_obj', False)
+        first_prompt_new = create_prompt(df, stage=1, question=question_text, comments=comment_text, first_answer=answer_text)
+        full_response_1_new, _, _ = get_openai_response(first_prompt_new)
+        answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
+        answer_obj = UserComment.objects.create(
+            question_text=question_obj,
+            comment_text=comment_text,
+            generated_response=answer_content_1_new
+        )
+        request.session['answer_text'] = answer_content_1_new
+
+        return redirect('example3:ask_question')
 
 
 
