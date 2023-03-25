@@ -14,6 +14,12 @@ def nested_json_dict_get(value, arg):
     for key in keys:
         if isinstance(data, dict) and key in data:
             data = data[key]
+        elif isinstance(data, list) and key.isdigit():
+            idx = int(key)
+            if 0 <= idx < len(data):
+                data = data[idx]
+            else:
+                return None
         else:
             return None
     return data
