@@ -17,7 +17,7 @@
       <div class="card-body">
         <h5 class="card-title">Input your questions here</h5>
 
-          <form method="post" action="{% url 'example3:ask_question' %}"></form>
+          <form method="post" action="{% url 'example3:ask_question' %}">
               {% csrf_token %}
               <!-- <label for="question">Question:</label> -->
               <input type="text" class="form-control" id="question" name="question_text" required>
