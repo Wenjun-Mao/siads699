@@ -94,13 +94,14 @@ class Step2ProcessView(View):
         except Exception as e:
             # print("Error in get_execute_output", e)
             execute_output = "Error"
+        
         question_obj.execute_output = execute_output
         question_obj.second_full_response = second_full_response
 
         if execute_output == "Error":
             question_obj.status = 2
             question_obj.save()
-            current_answer = "Sorry, I cannot answer your question. Please try again."
+            current_answer = "Sorry, error execute_output."
             ###### Let user retry??????????????? ######
         else:
             question_obj.status = 0
