@@ -13,5 +13,5 @@ urlpatterns = [
     path('', views.Step1AskQuestionView.as_view(), name='ask_question'),
     path('accept_answer', views.Step2ProcessView.as_view(), name='accept_answer'),
     path('addcomment', views.Step2AddCommentView.as_view(), name='add_comment'),
-    path('list/', views.question_list, name='question_list'),
+    path('list/', views.QuestionListView.as_view(), name='question_list'),
 ]

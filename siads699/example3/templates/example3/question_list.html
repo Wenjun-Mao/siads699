@@ -1,5 +1,7 @@
 {% extends "base_dashboard3.html" %}
 
+{% load custom_filters %}
+
 {% block title %}{{ settings.APP_NAME }}{% endblock %}
 
 {% block content %}
@@ -7,7 +9,7 @@
   <h1>Query Records</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="">Home</a></li>
       <li class="breadcrumb-item">Pages</li>
       <li class="breadcrumb-item active">Blank</li>
     </ol>
@@ -26,9 +28,14 @@
             <ul class="list-group list-group-flush">
               {% for question in page_obj %}
                 <li class="list-group-item">
-                  <ul><strong><span>Id:        </span></strong> {{ question.id }} </ul>
-                  <ul><strong><span>Question:  </span></strong> {{ question.question }}</ul>
-                  <ul><strong><span>Answer:    </span></strong> {{ question.answer }}</ul>
+                  <ul><strong><span>Question Id:        </span></strong> {{ question.id }} </ul>
+                  <ul><strong><span>Question:  </span></strong> {{ question.question_text }}</ul>
+                  <ul><strong><span>First Answer:    </span></strong> {{ question.first_full_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
+                  <ul><strong><span>Accepted Answer:   </span></strong> {{ question.first_approved_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
+                  <ul><strong><span>Final Answer:   </span></strong> {{ question.third_full_response|nested_json_dict:'choices.0.id' }}</ul>
+                  <ul><strong><span>Execute Output:   </span></strong> {{ question.execute_output }}</ul>
+                  <ul><strong><span>Question Status#:   </span></strong> {{ question.status }}</ul>
+                  <ul><strong><span>Model Info:   </span></strong> {{ question.model }} Temperature: {{ question.temperature }}</ul>
                   <ul><strong><span>Created_at:</span></strong> {{ question.created_at }}</ul>
                 </li>
               {% empty %}

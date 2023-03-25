@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views import View
+from django.views import View, generic
 from .models import QuestionV3, UserComment
 
 import json
@@ -137,9 +137,7 @@ class Step2AddCommentView(View):
         return redirect('example3:ask_question')
 
 
-def question_list(request):
-    questions = QuestionV3.objects.all()
-    context = {
-        'questions': questions
-    }
-    return render(request, 'example3/question_list2.html', context)
+class QuestionListView(generic.ListView):
+    model = QuestionV3
+    paginate_by = 5
+    template_name = 'example3/question_list2.html'
