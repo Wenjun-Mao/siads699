@@ -16,10 +16,10 @@ class QuestionV3(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return self.question
+        return f'{self.question_text}, status: {self.status}'
 
 class UserComment(models.Model):
-    question = models.ForeignKey(QuestionV3, on_delete=models.CASCADE, related_name="comments")
+    question_obj = models.ForeignKey(QuestionV3, on_delete=models.CASCADE, related_name="comments")
     comment_text = models.CharField(max_length=65535, blank=True)
     generated_full_response = models.CharField(max_length=65535, blank=True)
     accepted = models.BooleanField(default=False)
@@ -29,4 +29,4 @@ class UserComment(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return f"{self.question.question_text} - {self.user_comment}"
+        return f"{self.question_obj.question_text} - {self.user_comment}"
