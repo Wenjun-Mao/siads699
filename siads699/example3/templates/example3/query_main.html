@@ -44,30 +44,12 @@
 
 
         {% if answer_text and answer_text != '__irrelevant__' %}
-        <form method="post" action="{% url 'example3:accept_answer' %}">
-          {% csrf_token %}
-          <button class="btn btn-primary" name="answer" value="yes">Yes</button>
-          <button class="btn btn-secondary" name="answer" value="no" id="no-button">No</button>
-          <div id="comment-form" style="display:none;">
-              <input type="text" class="form-control" id="comment-text" name="comment_text" required>
-              <br>
-              <button type="submit" class="btn btn-primary" name="add_comment" id="submit-comment">Submit My Comment</button>
-          </div>
-        </form>
-        <script>
-            document.getElementById('no-button').addEventListener('click', function(event) {
-                event.preventDefault();  // prevent the default form submission
-                document.getElementById('comment-form').style.display = 'block';
-            });
-        </script>
-        {% endif %}
-
-        {% if answer_text and answer_text != '__irrelevant__' %}
             <form method="post" action="{% url 'example3:accept_answer' %}">
                 {% csrf_token %}
-                <button class="btn btn-primary" name="answer" value="yes">Yes</button>
-                <button class="btn btn-secondary" name="answer" value="no" id="no-button">No</button>
+                <button class="btn btn-primary" value="yes">Yes</button>
+                <button class="btn btn-secondary" value="no" id="no-button">No</button>
             </form>
+            <br>
             <form method="post" action="{% url 'example3:add_comment' %}" id="comment-form" style="display: none;">
                 {% csrf_token %}
                 <input type="text" class="form-control" id="comment-text" name="comment_text" required>
