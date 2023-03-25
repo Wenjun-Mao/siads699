@@ -72,12 +72,17 @@ def get_execute_output(second_answer, db_name):
 def create_prompt(df, stage, question, first_answer=None, comments=None, second_answer=None, output=None, table_name='df', language='SQL'):
     data_format = 'pandas dataframe' if language == 'python' else 'table'
     cols = ','.join(str(col) for col in df.columns)
-    prompt = f'You are a sales analyst. My data is a {data_format} named {table_name}, the columns are: [{cols}]\nThe question I\'m trying to answer is: QUESTION: {question}\n'
+    prompt = f'You are a sales analyst. My data is a {data_format} named {table_name}, the columns are: [{cols}]\nThe question I\'m trying to answer is: QUESTION: ---\n{question}\n---\n'
 
-    if stage == 1:
+    if stage == 1 and comments is None:
         prompt += 'Explain the logic step by step.\n'
-        prompt += 'Now, without writing any code, just explain the logic, how to find answer to the following questions, do it step by step.'
+        prompt += 'Without any code, just explain the logic, how to find answer to the question, do it step by step.'
         prompt += 'In case the question is irrelevant to the data, just replay "__irrelevant__" and nothing else.\n'
+    elif stage == 1 and comments is not None:
+        prompt += f'We use this logic to find the answer, LOGIC:\n---\n{first_answer}\n---\n'
+        prompt += f'But we found a problem, the comments to it is: ---\n{comments}\n---\n'
+        prompt += 'Without any code, just explain the logic, how to find answer to the question, do it step by step.'
+        prompt += f'In case you find it irrelevant to the data, just replay "__irrelevant__" and nothing else.\n'
     elif stage == 2:
         prompt += f'The steps are:\n{first_answer}\n\nProvide the {language} code, just the code, nothing else\n'
     elif stage == 3:
