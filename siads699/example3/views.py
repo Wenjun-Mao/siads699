@@ -43,8 +43,8 @@ class Step1AskQuestionView(View):
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
             if answer_content_1 == "__irrelevant__":
                 status = 1
-            else:
-                status = 0
+            # else:
+            #     status = 0
             question_obj = QuestionV3.objects.create(
                 question_text=question_text,
                 first_full_response=full_response_1,
