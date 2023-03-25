@@ -22,7 +22,7 @@ class QuestionV3(models.Model):
 class UserComment(models.Model):
     question = models.ForeignKey(QuestionV3, on_delete=models.CASCADE, related_name="comments")
     comment_text = models.CharField(max_length=65535, blank=True)
-    generated_response = models.CharField(max_length=65535, blank=True)
+    generated_full_response = models.CharField(max_length=65535, blank=True)
     accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

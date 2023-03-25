@@ -43,7 +43,7 @@
         {% endif %}
 
 
-        {% if answer_text and answer_text != '__irrelevant__' %}
+        {% if answer_text and not "__irrelevant__" in answer_text.lower() %}
             <form method="post" action="{% url 'example3:accept_answer' %}">
                 {% csrf_token %}
                 <button class="btn btn-primary" value="yes">Yes</button>

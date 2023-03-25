@@ -67,12 +67,30 @@ class Step1AskQuestionView(View):
 
 class Step2ProcessView(View):
     def post(self, request, *args, **kwargs):
-        # handle the POST request here
+        # check if session has comment_id
+        comment_id = request.session.get('comment_id', False)
+        if comment_id:
+            comment_obj = UserComment.objects.get(id=comment_id)
+            comment_obj.accepted = True
+            comment_obj.save()
+            accepted_full_answer_from_comment = comment_obj.generated_full_response
+
+        question_id = request.session.get('question_id', False)
+        question_obj = QuestionV3.objects.get(id=question_id)
+        if comment_id:
+            question_obj.first_approved_response = accepted_full_answer_from_comment
+        else:
+            question_obj.first_approved_response = question_obj.first_full_response
+        question_obj.save()
+
+        
+
+
+
         return redirect('example3:ask_question')
 
 class Step2AddCommentView(View):
     def post(self, request, *args, **kwargs):
-        # handle the POST request here
         comment_text = request.POST.get('comment_text', False)
         question_obj = QuestionV3.objects.get(id=request.session.get('question_id'))
         question_text = question_obj.question_text
@@ -81,14 +99,10 @@ class Step2AddCommentView(View):
         full_response_1_new, _, _ = get_openai_response(first_prompt_new)
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
 
-        test_q = request.session.get('answer_text')
-        print('test_q: ', test_q)
-
-
         comment_obj = UserComment.objects.create(
             question=question_obj,
             comment_text=comment_text,
-            generated_response=answer_content_1_new
+            generated_full_response=full_response_1_new
         )
         request.session['answer_text'] = answer_content_1_new
         request.session['comment_id'] = comment_obj.id
