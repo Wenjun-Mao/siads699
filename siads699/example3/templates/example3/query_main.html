@@ -57,7 +57,7 @@
             </select>
             <br>
             <h5 class="card-title">Input your questions here</h5>
-            <textarea class="form-control" id="question" name="question_text" rows="4" required></textarea>
+            <textarea class="form-control" id="question" name="question_text" rows="3" required></textarea>
             <br>
             <input type="submit" class="btn btn-primary" value="Submit My Question">
         </form>
@@ -89,7 +89,7 @@
             <br>
             <form method="post" action="{% url 'example3:add_comment' %}" id="comment-form" style="display: none;">
                 {% csrf_token %}
-                <textarea class="form-control" id="comment-text" name="comment_text" required></textarea>
+                <textarea class="form-control" id="comment-text" name="comment_text" rows="3" required></textarea>
                 <br>
                 <button type="submit" class="btn btn-primary">Submit My Comment</button>
             </form>
