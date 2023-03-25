@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .models import QuestionV3, UserComment
-from .forms import UserCommentForm
+
+from django.http import HttpResponse
 
 # from .forms import AskQuestionForm, UserCommentForm
 from .chatgpt_utils699_web import create_prompt, get_openai_response, get_execute_output
@@ -61,9 +62,21 @@ class Step1AskQuestionView(View):
         return redirect(request.path)
 
 
-# class Step2UserCommentView(View):
+class Step2ProcessView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("This is a placeholder view.")
 
+    def post(self, request, *args, **kwargs):
+        # handle the POST request here
+        return HttpResponse("This is a placeholder view with a POST method.")
 
+class Step2AddCommentView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("This is a placeholder view.")
+
+    def post(self, request, *args, **kwargs):
+        # handle the POST request here
+        return HttpResponse("This is a placeholder view with a POST method.")
 
 
 
