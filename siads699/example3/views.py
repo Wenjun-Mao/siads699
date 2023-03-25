@@ -38,9 +38,10 @@ class Step1AskQuestionView(View):
         question_text = request.POST.get('question_text', False)
         first_prompt = create_prompt(df, stage=1, question=question_text)
         model_selected = request.POST.get('model_selected', False)
-        print(model_selected)
+        temperature_selected = 0.2
+        
         try:
-            full_response_1, model, temperature = get_openai_response(first_prompt)
+            full_response_1, model, temperature = get_openai_response(first_prompt, model=model_selected, temperature=temperature_selected)
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
             if answer_content_1 == "__irrelevant__":
                 status = 1
@@ -87,7 +88,7 @@ class Step2ProcessView(View):
         question_text = question_obj.question_text
 
         second_prompt = create_prompt(df, stage=2, question=question_text, first_answer=answer_text)
-        second_full_response, _, _ = get_openai_response(second_prompt)
+        second_full_response, _, _ = get_openai_response(second_prompt, model=question_obj.model, temperature=question_obj.temperature)
         answer_content_2 = second_full_response['choices'][0]['message']['content'].strip()
         try:
             execute_output = get_execute_output(answer_content_2, temp_db)
@@ -106,7 +107,7 @@ class Step2ProcessView(View):
         else:
             question_obj.status = 0
             third_prompt = create_prompt(df, stage=3, question=question_text, first_answer=answer_text, second_answer=answer_content_2, output=execute_output)
-            third_full_response, _, _ = get_openai_response(third_prompt)
+            third_full_response, _, _ = get_openai_response(third_prompt, model=question_obj.model, temperature=question_obj.temperature)
             answer_content_3 = third_full_response['choices'][0]['message']['content'].strip()
             question_obj.third_full_response = third_full_response
             question_obj.save()
@@ -126,7 +127,7 @@ class Step2AddCommentView(View):
         question_text = question_obj.question_text
         answer_text = json.loads(question_obj.first_full_response)['choices'][0]['message']['content'].strip()
         first_prompt_new = create_prompt(df, stage=1, question=question_text, comments=comment_text, first_answer=answer_text)
-        full_response_1_new, _, _ = get_openai_response(first_prompt_new)
+        full_response_1_new, _, _ = get_openai_response(first_prompt_new, model=question_obj.model, temperature=question_obj.temperature)
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
 
         comment_obj = UserComment.objects.create(
