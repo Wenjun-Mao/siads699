@@ -50,7 +50,7 @@ class Step1AskQuestionView(View):
                 first_full_response=full_response_1,
                 model=model,
                 temperature=temperature,
-                status=status
+                # status=status
             )
         except Exception as e:
             answer_content_1 = "Sorry, I cannot answer your question. Please try again."
