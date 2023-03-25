@@ -26,7 +26,7 @@
           <h5 class="card-title">#user_name's Query List</h5>
           <p>
             <ul class="list-group list-group-flush">
-              {% for question in paginator %}
+              {% for question in object_list %}
                 <li class="list-group-item">
                   <ul><strong><span>Question Id:        </span></strong> {{ question.id }} </ul>
                   <ul><strong><span>Question:  </span></strong> {{ question.question_text }}</ul>
