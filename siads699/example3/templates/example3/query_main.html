@@ -42,9 +42,17 @@
               <br>
 
               <select class="form-control" name="temperature_selected" id="dropdown_value">
-                {% for value in '0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0'|split:',' %}
-                  <option value="{{ value }}">{{ value }}</option>
-                {% endfor %}
+                <option value="0.0">0.0</option>
+                <option value="0.1">0.1</option>
+                <option value="0.2" selected>0.2</option>
+                <option value="0.3">0.3</option>
+                <option value="0.4">0.4</option>
+                <option value="0.5">0.5</option>
+                <option value="0.6">0.6</option>
+                <option value="0.7">0.7</option>
+                <option value="0.8">0.8</option>
+                <option value="0.9">0.9</option>
+                <option value="1.0">1.0</option>
               </select>
               <br>
 
