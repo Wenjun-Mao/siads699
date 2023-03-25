@@ -67,25 +67,54 @@ class Step1AskQuestionView(View):
 
 class Step2ProcessView(View):
     def post(self, request, *args, **kwargs):
-        # check if session has comment_id
         comment_id = request.session.get('comment_id', False)
+        # Get the comment object and set accepted to True
         if comment_id:
             comment_obj = UserComment.objects.get(id=comment_id)
             comment_obj.accepted = True
             comment_obj.save()
-            accepted_full_answer_from_comment = comment_obj.generated_full_response
 
         question_id = request.session.get('question_id', False)
         question_obj = QuestionV3.objects.get(id=question_id)
+        # Save the first approved response
         if comment_id:
-            question_obj.first_approved_response = accepted_full_answer_from_comment
+            question_obj.first_approved_response = comment_obj.generated_full_response
         else:
             question_obj.first_approved_response = question_obj.first_full_response
-        question_obj.save()
+        question_obj.save() ##########
 
-        
+        answer_text = json.loads(question_obj.first_approved_response)['choices'][0]['message']['content'].strip()
+        question_text = question_obj.question_text
 
+        second_prompt = create_prompt(df, stage=2, question=question_text, first_answer=answer_text)
+        second_full_response, _, _ = get_openai_response(second_prompt)
+        answer_content_2 = second_full_response['choices'][0]['message']['content'].strip()
+        try:
+            execute_output = get_execute_output(second_full_response, temp_db)
+        except Exception as e:
+            # print("Error in get_execute_output", e)
+            execute_output = "Error"
+        question_obj.execute_output = execute_output
+        question_obj.second_full_response = second_full_response
 
+        if execute_output == "Error":
+            question_obj.status = 2
+            question_obj.save()
+            current_answer = "Sorry, I cannot answer your question. Please try again."
+            ###### Let user retry??????????????? ######
+        else:
+            question_obj.status = 0
+            third_prompt = create_prompt(df, stage=3, question=question_text, first_answer=answer_text, second_answer=answer_content_2, output=execute_output)
+            third_full_response, _, _ = get_openai_response(third_prompt)
+            answer_content_3 = third_full_response['choices'][0]['message']['content'].strip()
+            question_obj.third_full_response = third_full_response
+            question_obj.save()
+            current_answer = answer_content_3
+
+        request.session['question_text'] = question_text
+        request.session['answer_text'] = current_answer
+        request.session['question_id'] = question_obj.id
+        request.session['comment_id'] = comment_id
 
         return redirect('example3:ask_question')
 
