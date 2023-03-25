@@ -11,7 +11,7 @@ import pandas as pd
 import openai
 from sqlalchemy import create_engine
 from sqlalchemy import text
-openai.api_key = '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'
+# openai.api_key = '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'
 
 ######### Prepare data #########
 import os
