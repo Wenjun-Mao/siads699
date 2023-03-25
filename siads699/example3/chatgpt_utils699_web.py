@@ -82,7 +82,8 @@ def create_prompt(df, stage, question, first_answer=None, comments=None, second_
         prompt += f'We use this logic to find the answer, LOGIC:\n---\n{first_answer}\n---\n'
         prompt += f'But we found a problem, the comments to it is: ---\n{comments}\n---\n'
         prompt += 'Without any code, just explain the logic, how to find answer to the question, do it step by step.'
-        prompt += f'In case you find it irrelevant to the data, just replay "__irrelevant__" and nothing else.\n'
+        # prompt += f'In case you find it irrelevant to the data, just replay "__irrelevant__" and nothing else.\n'
+        prompt += f'In case the comment is irrelevant to the data, just replay "__irrelevant__" and nothing else.\n'
     elif stage == 2:
         prompt += f'The steps are:\n{first_answer}\n\nProvide the {language} code, just the code, nothing else\n'
     elif stage == 3:
