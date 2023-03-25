@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .models import QuestionV3, UserComment
 
+import json
+
 from django.http import HttpResponse
 
 # from .forms import AskQuestionForm, UserCommentForm
@@ -74,7 +76,7 @@ class Step2AddCommentView(View):
         comment_text = request.POST.get('comment_text', False)
         question_obj = QuestionV3.objects.get(id=request.session.get('question_id'))
         question_text = question_obj.question_text
-        answer_text = question_obj.first_full_response['choices'][0]['message']['content'].strip()
+        answer_text = json.loads(question_obj.first_full_response)['choices'][0]['message']['content'].strip()
         first_prompt_new = create_prompt(df, stage=1, question=question_text, comments=comment_text, first_answer=answer_text)
         full_response_1_new, _, _ = get_openai_response(first_prompt_new)
         answer_content_1_new = full_response_1_new['choices'][0]['message']['content'].strip()
