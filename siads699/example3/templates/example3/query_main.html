@@ -83,8 +83,8 @@
         {% if answer_text and not "__irrelevant__" in answer_text|lower %}
             <form method="post" action="{% url 'example3:accept_answer' %}">
                 {% csrf_token %}
-                <button class="btn btn-primary" value="yes">Yes</button>
-                <button class="btn btn-secondary" value="no" id="no-button">No</button>
+                <button class="btn btn-primary" value="yes">Looks good, please proceed.</button>
+                <button class="btn btn-secondary" value="no" id="no-button">Not good, I’d like to add comments.</button>
             </form>
             <br>
             <form method="post" action="{% url 'example3:add_comment' %}" id="comment-form" style="display: none;">
