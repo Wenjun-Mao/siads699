@@ -228,7 +228,7 @@
   
     thumbs.forEach(function(thumb) {
       thumb.addEventListener('click', function() {
-        console.log('Thumb clicked');
+        // console.log('Thumb clicked');
         const userRating = thumb.dataset.userRating;
         updateUserRating(questionId, userRating, thumb);
       });
@@ -249,7 +249,7 @@
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 200) {
-          console.log('User rating updated successfully');
+          // console.log('User rating updated successfully');
           updateSelectedThumb(thumb);
           displayRatingMessage();
         } else {
