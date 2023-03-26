@@ -82,27 +82,25 @@
 
 
         {% if answer_text and not "__irrelevant__" in answer_text|lower %}
-            <form method="post" action="{% url 'example3:accept_answer' %}">
-                {% csrf_token %}
-                <button class="btn btn-primary" value="yes">Looks good, please proceed.</button>
-                <button class="btn btn-secondary" value="no" id="no-button">Not good, I’d like to add comments.</button>
-            </form>
-            <br>
-            <form method="post" action="{% url 'example3:add_comment' %}" id="comment-form" style="display: none;">
-                {% csrf_token %}
-                <textarea class="form-control" id="comment-text" name="comment_text" rows="3" required></textarea>
-                <br>
-                <button type="submit" class="btn btn-primary">Submit My Comment</button>
-            </form>
-            <script>
-                document.getElementById('no-button').addEventListener('click', function(event) {
-                    event.preventDefault();  // prevent the default form submission
-                    document.getElementById('comment-form').style.display = 'block';
-                });
-            </script>
-        {% endif %}
+          <form method="post" action="{% url 'example3:accept_answer' %}">
+              {% csrf_token %}
+              <button class="btn btn-primary" value="yes">Looks good, please proceed.</button>
+              <button class="btn btn-secondary" value="no" id="no-button">Not good, I’d like to add comments.</button>
+          </form>
+          <br>
+          <form method="post" action="{% url 'example3:add_comment' %}" id="comment-form" style="display: none;">
+              {% csrf_token %}
+              <textarea class="form-control" id="comment-text" name="comment_text" rows="3" required></textarea>
+              <br>
+              <button type="submit" class="btn btn-primary">Submit My Comment</button>
+          </form>
+          <script>
+              document.getElementById('no-button').addEventListener('click', function(event) {
+                  event.preventDefault();  // prevent the default form submission
+                  document.getElementById('comment-form').style.display = 'block';
+              });
+          </script>
         
-        <!-- {% if status_code == 0 %} -->
           <div class="thumbs text-center">
             <i class="fa-regular fa-thumbs-up fa-2x" style="margin-right: 25px;" data-user-rating="1"></i>
             <i class="fa-regular fa-thumbs-down fa-2x" data-user-rating="2"></i>
@@ -110,7 +108,7 @@
           <div id="rating-message" class="text-success text-center" style="display: none;">
             Your rating has been recorded.
           </div>
-        <!-- {% endif %} -->
+        {% endif %}
 
       </div>
     </div>
