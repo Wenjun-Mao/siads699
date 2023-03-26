@@ -8,6 +8,7 @@ class QuestionV3(models.Model):
     third_full_response = models.CharField(max_length=65535, null=True)
     execute_output = models.CharField(max_length=1000, null=True)
     status = models.IntegerField(default=99)
+    user_rating = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     model = models.CharField(max_length=100)
     temperature = models.FloatField()

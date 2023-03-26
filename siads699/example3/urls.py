@@ -15,4 +15,5 @@ urlpatterns = [
     path('addcomment', views.Step2AddCommentView.as_view(), name='add_comment'),
     path('list/', views.QuestionListView.as_view(), name='question_list'),
     path('list_full/', views.QuestionListViewFull.as_view(), name='question_list'),
+    path('update_user_rating/', views.update_user_rating, name='update_user_rating'),
 ]

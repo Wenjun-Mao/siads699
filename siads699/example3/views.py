@@ -158,3 +158,19 @@ class QuestionListViewFull(generic.ListView):
     model = QuestionV3
     paginate_by = 5
     template_name = 'example3/question_list_full.html'
+
+
+from django.http import JsonResponse
+
+def update_user_rating(request):
+    if request.method == 'POST':
+        question_id = request.POST.get('question_id')
+        user_rating = request.POST.get('user_rating')
+
+        question = QuestionV3.objects.get(pk=question_id)
+        question.user_rating = int(user_rating)
+        question.save()
+
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})

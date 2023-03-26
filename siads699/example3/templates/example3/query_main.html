@@ -104,8 +104,8 @@
         
         <!-- {% if status_code == 0 %} -->
           <div class="thumbs text-center">
-            <i class="fa-regular fa-thumbs-up fa-2x" style="margin-right: 25px;"></i>
-            <i class="fa-regular fa-thumbs-down fa-2x"></i>
+            <i class="fa-regular fa-thumbs-up fa-2x" style="margin-right: 25px;" data-user-rating="1"></i>
+            <i class="fa-regular fa-thumbs-down fa-2x" data-user-rating="2"></i>
           </div>
         <!-- {% endif %} -->
 
@@ -213,4 +213,47 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const thumbs = document.querySelectorAll('.thumbs i');
+    const questionId = "{{ question.id }}";
+  
+    thumbs.forEach(function(thumb) {
+      thumb.addEventListener('click', function() {
+        const userRating = thumb.dataset.userRating;
+        updateUserRating(questionId, userRating);
+      });
+    });
+  });
+  
+  function updateUserRating(questionId, userRating) {
+    const xhr = new XMLHttpRequest();
+    const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    const data = new FormData();
+  
+    data.append('question_id', questionId);
+    data.append('user_rating', userRating);
+  
+    xhr.open('POST', '{% url "example3:update_user_rating" %}');
+    xhr.setRequestHeader('X-CSRFToken', csrfToken);
+  
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log('User rating updated successfully');
+          // Perform additional actions if needed, e.g., show a success message or update the page
+        } else {
+          console.error('Error updating user rating');
+        }
+      }
+    };
+  
+    xhr.send(data);
+  }
+  </script>
 {% endblock %}
