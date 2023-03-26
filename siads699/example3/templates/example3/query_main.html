@@ -225,6 +225,7 @@
   
     thumbs.forEach(function(thumb) {
       thumb.addEventListener('click', function() {
+        console.log('Thumb clicked');
         const userRating = thumb.dataset.userRating;
         updateUserRating(questionId, userRating);
       });
