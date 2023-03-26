@@ -57,6 +57,7 @@
             </select>
 
             <h5 class="card-title">Input your questions here</h5>
+            {% csrf_token %}
             <textarea class="form-control" id="question" name="question_text" rows="3" required></textarea>
             <br>
             <input type="submit" class="btn btn-primary" value="Submit My Question">
