@@ -230,12 +230,12 @@
       thumb.addEventListener('click', function() {
         console.log('Thumb clicked');
         const userRating = thumb.dataset.userRating;
-        updateUserRating(questionId, userRating);
+        updateUserRating(questionId, userRating, thumb);
       });
     });
   });
   
-  function updateUserRating(questionId, userRating) {
+  function updateUserRating(questionId, userRating, thumb) {
     const xhr = new XMLHttpRequest();
     const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     const data = new FormData();
