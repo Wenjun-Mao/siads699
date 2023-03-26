@@ -30,7 +30,8 @@ class Step1AskQuestionView(View):
     def get(self, request):
         answer_text = request.session.get('answer_text', False)
         question_text = request.session.get('question_text', False)
-        ctx = {'answer_text': answer_text, 'question_text': question_text}
+        status_code = request.session.get('status', False)
+        ctx = {'answer_text': answer_text, 'question_text': question_text, 'status_code': status_code}
 
         return render(request, self.template_name, ctx)
 
@@ -67,6 +68,7 @@ class Step1AskQuestionView(View):
         request.session['question_text'] = question_text
         # clear the comment_id so it doesn't get carried over to the next question
         request.session['comment_id'] = False
+        request.session['status_code'] = status
 
         return redirect(request.path)
 
@@ -122,6 +124,7 @@ class Step2ProcessView(View):
         request.session['answer_text'] = current_answer
         request.session['question_id'] = question_obj.id
         request.session['comment_id'] = comment_id
+        request.session['status_code'] = question_obj.status
 
         return redirect('example3:ask_question')
 
