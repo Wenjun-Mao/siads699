@@ -107,6 +107,9 @@
             <i class="fa-regular fa-thumbs-up fa-2x" style="margin-right: 25px;" data-user-rating="1"></i>
             <i class="fa-regular fa-thumbs-down fa-2x" data-user-rating="2"></i>
           </div>
+          <div id="rating-message" class="text-success" style="display: none;">
+            Your rating has been recorded.
+          </div>
         <!-- {% endif %} -->
 
       </div>
@@ -247,14 +250,33 @@
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 200) {
           console.log('User rating updated successfully');
-          // Perform additional actions if needed, e.g., show a success message or update the page
+          updateSelectedThumb(thumb);
+          displayRatingMessage();
         } else {
-          console.error('Error updating user rating');
+          console.error('Error updating user rating', xhr.responseText);
         }
       }
     };
   
     xhr.send(data);
+  }
+
+  function updateSelectedThumb(selectedThumb) {
+    const allThumbs = document.querySelectorAll('.thumbs i');
+    allThumbs.forEach(function(thumb) {
+      if (thumb === selectedThumb) {
+        thumb.classList.add('selected-thumb');
+      } else {
+        thumb.classList.remove('selected-thumb');
+      }
+    });
+  }
+
+  function displayRatingMessage() {
+    const ratingMessage = document.getElementById('rating-message');
+    if (ratingMessage) {
+      ratingMessage.style.display = 'block';
+    }
   }
   </script>
 {% endblock %}

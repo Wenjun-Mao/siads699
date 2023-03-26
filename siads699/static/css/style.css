@@ -1258,3 +1258,10 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+/*--------------------------------------------------------------
+# Wenjun's Custom CSS
+--------------------------------------------------------------*/
+.selected-thumb {
+  color: #007bff; /* Change this to the color you prefer */
+}
