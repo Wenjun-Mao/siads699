@@ -164,7 +164,7 @@ from django.http import JsonResponse
 
 def update_user_rating(request):
     if request.method == 'POST':
-        question_id = request.POST.get('question_id')
+        question_id = request.session.get('question_id')
         user_rating = request.POST.get('user_rating')
 
         question = QuestionV3.objects.get(pk=question_id)
