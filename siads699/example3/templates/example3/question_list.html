@@ -35,6 +35,7 @@
                   <ul><strong><span>Final Answer:   </span></strong> {{ question.third_full_response|nested_json_dict:'choices.0.message.content'|striptags }}</ul>
                   <ul><strong><span>Execute Output:   </span></strong> {{ question.execute_output }}</ul>
                   <ul><strong><span>Question Status#:   </span></strong> {{ question.status }}</ul>
+                  <ul><strong><span>User_rating:   </span></strong> {{ question.user_rating }}</ul>
                   <ul><strong><span>Model Info:   </span></strong> {{ question.model }} Temperature: {{ question.temperature }}</ul>
                   <ul><strong><span>Created_at:</span></strong> {{ question.created_at }}</ul>
                   <ul><strong><span>Comments:</span></strong>
