@@ -25,8 +25,6 @@ SITE_ROOT = os.path.join(BASE_DIR, 'site')
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path('example/', include('example.urls')),  commented out to give the root address to example app
-    path('', include('example.urls')),
-    path('', include('example2.urls')),
     path('example3/', include('example3.urls')),
     re_path(r'^site/(?P<path>.*)$', serve,
         {'document_root': SITE_ROOT, 'show_indexes': True},

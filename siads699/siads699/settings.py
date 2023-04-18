@@ -60,8 +60,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'social_django',
     'taggit',
-    'example.apps.ExampleConfig',
-    'example2.apps.Example2Config',
     'example3.apps.Example3Config',
 ]
 
