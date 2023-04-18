@@ -1,4 +1,4 @@
-<h1>NLP Text Data Analysis</h1><br>
+<h1>Data Analysis from Generative NLP Algorithms</h1><br>
 <p>
 This project leverages new Large Language Models from OpenAI to analyze data by creating a SQL query from a user asking a question in natural language and that SQL query will then query the database to produce the final output.
 </p>
