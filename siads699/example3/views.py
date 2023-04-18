@@ -11,7 +11,7 @@ import pandas as pd
 import openai
 from sqlalchemy import create_engine
 from sqlalchemy import text
-# openai.api_key = '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'
+openai.api_key = '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'
 
 ######### Prepare data #########
 import os
@@ -36,6 +36,11 @@ class Step1AskQuestionView(View):
         return render(request, self.template_name, ctx)
 
     def post(self, request):
+
+        question_obj, status = None, None
+        print(f"Openai-api-key")
+        print(openai.api_key)
+
         question_text = request.POST.get('question_text', False)
         first_prompt = create_prompt(df, stage=1, question=question_text)
         model_selected = request.POST.get('model_selected', False)
@@ -45,7 +50,7 @@ class Step1AskQuestionView(View):
         except ValueError:
             # Handle the error, e.g., set a default value or return an error message
             temperature_selected = 0.2
-        
+
         try:
             full_response_1, model, temperature = get_openai_response(first_prompt, model=model_selected, temperature=temperature_selected)
             answer_content_1 = full_response_1['choices'][0]['message']['content'].strip()
@@ -61,9 +66,13 @@ class Step1AskQuestionView(View):
                 status=status
             )
         except Exception as e:
-            answer_content_1 = "Sorry, I cannot answer your question. Please try again."
+            answer_content_1 = f"Sorry, I cannot answer your question. Please try again. {e}"
+            print(f"Er......{answer_content_1}")
 
-        request.session['question_id'] = question_obj.id
+        try:
+            request.session['question_id'] = question_obj.id
+        except:
+            print(answer_content_1)
         request.session['answer_text'] = answer_content_1
         request.session['question_text'] = question_text
         # clear the comment_id so it doesn't get carried over to the next question
@@ -102,7 +111,7 @@ class Step2ProcessView(View):
         except Exception as e:
             print("Error in get_execute_output", e)
             execute_output = "Error"
-        
+
         question_obj.execute_output = execute_output
         question_obj.second_full_response = second_full_response
 
